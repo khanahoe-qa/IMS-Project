@@ -5,16 +5,25 @@ public class Item {
 	private long id;
 	private String name;
 	private int stock;
+	private float price;
+	private int quantity;
 	
 	public Item(String name, int stock) {
 		this.name = name;
 		this.stock = stock;
 	}
-	
-	public Item(long id, String name, int stock) {
+
+	public Item(long id, String name, int stock, float price) {
 		this.id = id;
 		this.name = name;
 		this.stock = stock;
+		this.price = price;
+	}
+	
+	public Item(long id, String name, int quantity) {
+		this.id = id;
+		this.name = name;
+		this.quantity = quantity;
 	}
 	
 	public long getId() {
@@ -39,6 +48,22 @@ public class Item {
 	
 	public void setStock(int stock) {
 		this.stock = stock;
+	}
+	
+	public float getPrice() {
+		return price;
+	}
+
+	public void setPrice(float price) {
+		this.price = price;
+	}
+
+	public int getQuantity() {
+		return quantity;
+	}
+
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
 	}
 	
 	public String toString() {
