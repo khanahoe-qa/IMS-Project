@@ -129,7 +129,8 @@ public class ItemDAO implements Dao<Item>{
 		Long id = resultSet.getLong("item_id");
 		String name = resultSet.getString("name");
 		int stock = resultSet.getInt("stock");
-		return new Item(id, name, stock);
+		float price = resultSet.getFloat("price");
+		return new Item(id, name, stock, price);
 	}
 
 	
