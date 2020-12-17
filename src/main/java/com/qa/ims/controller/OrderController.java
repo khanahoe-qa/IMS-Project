@@ -1,21 +1,71 @@
 package com.qa.ims.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import com.mysql.cj.x.protobuf.MysqlxCrud.Order;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import com.qa.ims.persistence.dao.OrderDAO;
+import com.qa.ims.persistence.domain.Item;
+import com.qa.ims.persistence.domain.Order;
+import com.qa.ims.utils.Utils;
 
 public class OrderController implements CrudController<Order> {
 
+	public static final Logger LOGGER = LogManager.getLogger();
+
+	private OrderDAO orderDAO;
+	private Utils utils;
+
+	public OrderController(OrderDAO orderDAO, Utils utils) {
+		super();
+		this.orderDAO = orderDAO;
+		this.utils = utils;
+	}
+	
 	@Override
 	public List<Order> readAll() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Order> orders = orderDAO.readAll();
+		for (Order order : orders) {
+			LOGGER.info(order.toString());
+		}
+		return orders;
 	}
 
 	@Override
 	public Order create() {
-		// TODO Auto-generated method stub
-		return null;
+		LOGGER.info("\nPlease enter the customer id");
+		long customer_id = utils.getLong();
+		boolean cont = true;
+		List<Item> items = new ArrayList<>();
+		while(cont) {
+			
+			LOGGER.info("\nPlease enter an item id");
+			long item_id = utils.getLong();
+			LOGGER.info("\nPlease enter the quantity");
+			int quantity = utils.getInt();
+			Item item = new Item(item_id, quantity);
+			items.add(item);
+			boolean invalid = true;
+			while(invalid) {
+				LOGGER.info("\nAdd another item to the order (Y/N)?");
+				String choice = utils.getString();
+				if(choice.toLowerCase().equals("n")) {
+					invalid = false;
+					cont = false;
+				}
+				else if(choice.toLowerCase().equals("y")) {
+					invalid = false;
+				}
+				else {
+					LOGGER.info("\nPlease enter y or n.");
+				}
+			}
+		}
+		Order order = orderDAO.create(new Order(customer_id, items));
+		LOGGER.info("\nOrder created");
+		return order;
 	}
 
 	@Override

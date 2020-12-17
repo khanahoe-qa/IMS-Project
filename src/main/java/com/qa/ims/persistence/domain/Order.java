@@ -49,11 +49,15 @@ public class Order {
 	// Returns a string containing names of items and the number of each ordered
 	@Override
 	public String toString() {
-		String orderDetails = "Order id: " + order_id + ", customer id: " + customer_id;
+		String orderDetails = "\nOrder id: " + order_id + ", customer id: " + customer_id;
 		for(Item i: items) {
-			orderDetails += "\nItem: "+i.getName()+" ("+i.getQuantity()+")";
+			orderDetails += "\nItem ID: "+i.getId()+", quantity: "+i.getQuantity();
 		}
 		return orderDetails;
+	}
+	
+	public void addItem(Item item) {
+		items.add(item);
 	}
 	
 }
