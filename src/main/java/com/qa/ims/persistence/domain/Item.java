@@ -8,9 +8,10 @@ public class Item {
 	private float price;
 	private int quantity;
 	
-	public Item(String name, int stock) {
+	public Item(String name, int stock, float price) {
 		this.name = name;
 		this.stock = stock;
+		this.price = price;
 	}
 
 	public Item(long id, String name, int stock, float price) {
@@ -20,9 +21,8 @@ public class Item {
 		this.price = price;
 	}
 	
-	public Item(long id, String name, int quantity) {
+	public Item(long id, int quantity) {
 		this.id = id;
-		this.name = name;
 		this.quantity = quantity;
 	}
 	

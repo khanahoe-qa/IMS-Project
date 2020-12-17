@@ -76,8 +76,8 @@ public class ItemDAO implements Dao<Item>{
 	public Item create(Item item) {
 		try (Connection connection = DBUtils.getInstance().getConnection();
 				Statement statement = connection.createStatement();) {
-			statement.executeUpdate("INSERT INTO items(name, stock) values('" + item.getName()
-					+ "','" + item.getStock() + "')");
+			statement.executeUpdate("INSERT INTO items(name, stock, price) VALUES('"+ item.getName()
+					+ "'," + item.getStock() + "," + item.getPrice()+");");
 			return readLatest();
 		} catch (Exception e) {
 			LOGGER.debug(e);
