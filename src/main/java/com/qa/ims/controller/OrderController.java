@@ -70,8 +70,38 @@ public class OrderController implements CrudController<Order> {
 
 	@Override
 	public Order update() {
-		// TODO Auto-generated method stub
-		return null;
+		LOGGER.info("\n Please enter the ID of the order you would like to update");
+		long order_id = utils.getLong();
+		LOGGER.info("\nPlease enter the customer id");
+		long customer_id = utils.getLong();
+		boolean cont = true;
+		List<Item> items = new ArrayList<>();
+		while(cont) {
+			
+			LOGGER.info("\nPlease enter an item id");
+			long item_id = utils.getLong();
+			LOGGER.info("\nPlease enter the quantity");
+			int quantity = utils.getInt();
+			Item item = new Item(item_id, quantity);
+			items.add(item);
+			boolean invalid = true;
+			while(invalid) {
+				LOGGER.info("\nAdd another item to the order (Y/N)?");
+				String choice = utils.getString();
+				if(choice.toLowerCase().equals("n")) {
+					invalid = false;
+					cont = false;
+				}
+				else if(choice.toLowerCase().equals("y")) {
+					invalid = false;
+				}
+				else {
+					LOGGER.info("\nPlease enter y or n.");
+				}
+			}
+		}
+		Order order = orderDAO.update(new Order(order_id, customer_id, items));
+		return order;
 	}
 
 	@Override
