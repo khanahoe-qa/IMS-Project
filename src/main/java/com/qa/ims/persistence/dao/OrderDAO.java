@@ -6,7 +6,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -133,7 +136,15 @@ public class OrderDAO implements Dao<Order>{
 
 	@Override
 	public int delete(long id) {
-		// TODO Auto-generated method stub
+		try (Connection connection = DBUtils.getInstance().getConnection();
+				Statement statement = connection.createStatement();) {
+			statement.executeUpdate("DELETE FROM order_item WHERE order_id = " + id);
+			return statement.executeUpdate("DELETE FROM orders WHERE order_id = " + id);
+			
+		} catch (Exception e) {
+			LOGGER.debug(e);
+			LOGGER.error(e.getMessage());
+		}
 		return 0;
 	}
 
@@ -151,7 +162,7 @@ public class OrderDAO implements Dao<Order>{
 	
 	// Iterate through the orders list and add items from orders with the same id
 	// to the first order with that id, then delete all other orders with that id
-	private List<Order> collapseOrders(List<Order> orders){
+	private List<Order> collapseOrdersOld(List<Order> orders){
 		for(Order o: orders) {
 			for(Order p: orders) {
 				if(o.getOrder_id() == p.getOrder_id()) {
@@ -163,6 +174,29 @@ public class OrderDAO implements Dao<Order>{
 			}
 		}
 		return orders;
+	}
+	
+	private List<Order> collapseOrders(List<Order> orders){
+		
+		List<Order> collapsedOrders = new ArrayList<>();
+		Set<Long> order_ids = new HashSet<>();
+		
+		for(Order o: orders) {
+			order_ids.add(o.getOrder_id());
+		}
+		
+		for(long order_id: order_ids) {
+			List<Order> singleOrder = new ArrayList<>();
+			singleOrder = orders.stream().filter(o -> o.getOrder_id() == order_id).collect(Collectors.toList());
+			List<Item> items = new ArrayList<>();
+			for(Order item_order: singleOrder) {
+				Item item = item_order.getItems().get(0);
+				items.add(item);
+			}
+			Order order = new Order(order_id, singleOrder.get(0).getCustomer_id(), items);
+			collapsedOrders.add(order);
+		}
+		return collapsedOrders;
 	}
 	
 	// Creates entries in the order_item table for an order

@@ -40,13 +40,13 @@ public class IMS {
 	public void imsSystem() {
 		LOGGER.info("What is your username");
 		String username = utils.getString();
-		LOGGER.info("What is your password");
+		LOGGER.info("\nWhat is your password");
 		String password = utils.getString();
 
 		DBUtils.connect(username, password);
 		Domain domain = null;
 		do {
-			LOGGER.info("Which entity would you like to use?");
+			LOGGER.info("\nWhich entity would you like to use?");
 			Domain.printDomains();
 
 			domain = Domain.getDomain(utils);
@@ -70,7 +70,7 @@ public class IMS {
 					break;
 				}
 
-				LOGGER.info("What would you like to do with " + domain.name().toLowerCase() + ":");
+				LOGGER.info("\nWhat would you like to do with " + domain.name().toLowerCase() + ":\n");
 
 				Action.printActions();
 				Action action = Action.getAction(utils);
