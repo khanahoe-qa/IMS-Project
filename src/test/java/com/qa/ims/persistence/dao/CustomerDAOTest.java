@@ -18,7 +18,7 @@ public class CustomerDAOTest {
 
 	@BeforeClass
 	public static void init() {
-		DBUtils.connect("root", "pass");
+		DBUtils.connect("root", "root");
 	}
 
 	@Before
@@ -31,7 +31,13 @@ public class CustomerDAOTest {
 		final Customer created = new Customer(2L, "chris", "perrins");
 		assertEquals(created, DAO.create(created));
 	}
-
+	
+	@Test
+	public void testCreateFail() {
+		final Customer created = new Customer(1L, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "perrins");
+		assertEquals(null, DAO.create(created));
+	}
+	
 	@Test
 	public void testReadAll() {
 		List<Customer> expected = new ArrayList<>();
@@ -49,16 +55,34 @@ public class CustomerDAOTest {
 		final long ID = 1L;
 		assertEquals(new Customer(ID, "jordan", "harrison"), DAO.readCustomer(ID));
 	}
+	
+	@Test
+	public void testReadFail() {
+		final long ID = 99L;
+		assertEquals(null, DAO.readCustomer(ID));
+	}
 
 	@Test
 	public void testUpdate() {
 		final Customer updated = new Customer(1L, "chris", "perrins");
 		assertEquals(updated, DAO.update(updated));
-
+	}
+	
+	@Test
+	public void testUpdateFail() {
+		final Customer updated = new Customer(99L, "chris", "perrins");
+		assertEquals(null, DAO.update(updated));
 	}
 
 	@Test
 	public void testDelete() {
-		assertEquals(1, DAO.delete(1));
+		final Customer created = new Customer(2L, "chris", "perrins");
+		DAO.create(created);
+		assertEquals(1, DAO.delete(2));
+	}
+	
+	@Test
+	public void testDeleteFail() {
+		assertEquals(0, DAO.delete(1));
 	}
 }
