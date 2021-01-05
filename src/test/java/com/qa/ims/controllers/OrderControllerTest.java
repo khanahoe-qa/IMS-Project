@@ -97,6 +97,9 @@ public class OrderControllerTest {
 		Mockito.when(dao.delete(any(Long.class))).thenReturn(1);
 		
 		assertEquals(1, controller.delete());
+		
+		Mockito.verify(utils, Mockito.times(1)).getLong();
+		Mockito.verify(dao, Mockito.times(1)).delete(1l);
 	}
 	
 	@Test

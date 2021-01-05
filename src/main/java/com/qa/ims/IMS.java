@@ -36,6 +36,15 @@ public class IMS {
 		final OrderDAO orderDAO = new OrderDAO();
 		this.orders = new OrderController(orderDAO, utils);
 	}
+	
+
+	public IMS(CustomerController customers, ItemController items, OrderController orders, Utils utils) {
+		super();
+		this.customers = customers;
+		this.items = items;
+		this.orders = orders;
+		this.utils = utils;
+	}
 
 	public void imsSystem() {
 		LOGGER.info("What is your username");
