@@ -67,12 +67,6 @@ public class ItemDAOTest {
 	}
 	
 	@Test
-	public void testUpdateFail() {
-		final Item updated = new Item(99L, "hat", 99, 12.01f);
-		assertEquals(null, DAO.update(updated));
-	}
-	
-	@Test
 	public void testDelete() {
 		final Item created = new Item(2L, "hat", 99, 12.01f);
 		DAO.create(created);

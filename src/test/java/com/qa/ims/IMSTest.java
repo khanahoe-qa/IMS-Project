@@ -42,12 +42,12 @@ public class IMSTest {
 		
 		Customer created = new Customer("Joe", "Bloggs");
 		
-		when(utils.getString()).thenReturn("uname", "pwd", "CUSTOMER", "CREATE", "RETURN", "STOP");
+		when(utils.getString()).thenReturn("uname", "pwd", "blah", "CUSTOMER", "blah", "CREATE", "RETURN", "STOP");
 		when(customers.create()).thenReturn(created);
 		
 		ims.imsSystem();
 		
-		Mockito.verify(utils, Mockito.times(6)).getString();
+		Mockito.verify(utils, Mockito.times(8)).getString();
 		Mockito.verify(customers, Mockito.times(1)).create();
 
 	}
