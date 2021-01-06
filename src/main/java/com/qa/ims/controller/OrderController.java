@@ -63,14 +63,15 @@ public class OrderController implements CrudController<Order> {
 				}
 			}
 		}
-		Order order = orderDAO.create(new Order(customer_id, items));
+		Order order = new Order(customer_id, items);
+		Order created = orderDAO.create(order);
 		LOGGER.info("\nOrder created");
-		return order;
+		return created;
 	}
 
 	@Override
 	public Order update() {
-		LOGGER.info("\n Please enter the ID of the order you would like to update");
+		LOGGER.info("\nPlease enter the ID of the order you would like to update");
 		long order_id = utils.getLong();
 		LOGGER.info("\nPlease enter the customer id");
 		long customer_id = utils.getLong();

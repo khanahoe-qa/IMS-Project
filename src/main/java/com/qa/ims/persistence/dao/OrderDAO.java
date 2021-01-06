@@ -163,20 +163,7 @@ public class OrderDAO implements Dao<Order>{
 	
 	// Iterate through the orders list and add items from orders with the same id
 	// to the first order with that id, then delete all other orders with that id
-	private List<Order> collapseOrdersOld(List<Order> orders){
-		for(Order o: orders) {
-			for(Order p: orders) {
-				if(o.getOrder_id() == p.getOrder_id()) {
-					if(o != p) {
-						o.addItem(p.getItems().get(0));
-						orders.remove(p);
-					}
-				}
-			}
-		}
-		return orders;
-	}
-	
+
 	private List<Order> collapseOrders(List<Order> orders){
 		
 		List<Order> collapsedOrders = new ArrayList<>();
