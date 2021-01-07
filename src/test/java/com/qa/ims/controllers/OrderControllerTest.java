@@ -61,7 +61,7 @@ public class OrderControllerTest {
 	}
 	
 	@Test
-	public void testUpdate() {
+	public void testUpdateRemake() {
 		final Long ORDER_ID = 1l;
 		final Long CUSTOMER_ID = 1l;
 		final Long ITEM1_ID = 1l;
@@ -71,22 +71,107 @@ public class OrderControllerTest {
 		
 		Item item1 = new Item(ITEM1_ID, QUANTITY1);
 		Item item2 = new Item(ITEM2_ID, QUANTITY2);
-		List<Item> items = new ArrayList<>();
-		items.add(item1);
-		items.add(item2);
-		final Order updated = new Order(ORDER_ID, CUSTOMER_ID, items);
+		List<Item> oldItems = new ArrayList<>();
+		List<Item> newItems = new ArrayList<>();
+		oldItems.add(item1);
+		newItems.add(item1);
+		newItems.add(item2);
+		final Order oldOrder = new Order(ORDER_ID, CUSTOMER_ID, oldItems);
+		final Order updated = new Order(ORDER_ID, CUSTOMER_ID, newItems);
 		
 		Mockito.when(utils.getLong()).thenReturn(ORDER_ID, CUSTOMER_ID, ITEM1_ID, ITEM2_ID);
 		Mockito.when(utils.getInt()).thenReturn(QUANTITY1, QUANTITY2);
-		Mockito.when(utils.getString()).thenReturn("q", "y", "n");
+		Mockito.when(utils.getString()).thenReturn("remake","q", "y", "n");
+		Mockito.when(dao.readOrder(any(Long.class))).thenReturn(oldOrder);
 		Mockito.when(dao.update(any(Order.class))).thenReturn(updated);
 		
 		assertEquals(updated, controller.update());
 		
-		Mockito.verify(utils, Mockito.times(3)).getString();
+		Mockito.verify(utils, Mockito.times(4)).getString();
 		Mockito.verify(utils, Mockito.times(4)).getLong();
 		Mockito.verify(utils, Mockito.times(2)).getInt();
+		Mockito.verify(dao, Mockito.times(1)).readOrder(ORDER_ID);
 		Mockito.verify(dao, Mockito.times(1)).update(updated);
+	}
+	
+	@Test
+	public void testUpdateAdd() {
+		final Long ORDER_ID = 1l;
+		final Long CUSTOMER_ID = 1l;
+		final Long ITEM1_ID = 1l;
+		final Long ITEM2_ID = 2l;
+		final Integer QUANTITY1 = 1;
+		final Integer QUANTITY2 = 2;
+		
+		Item item1 = new Item(ITEM1_ID, QUANTITY1);
+		Item item2 = new Item(ITEM2_ID, QUANTITY2);
+		List<Item> oldItems = new ArrayList<>();
+		List<Item> newItems = new ArrayList<>();
+		oldItems.add(item1);
+		newItems.add(item1);
+		newItems.add(item2);
+		final Order oldOrder = new Order(ORDER_ID, CUSTOMER_ID, oldItems);
+		final Order updated = new Order(ORDER_ID, CUSTOMER_ID, newItems);
+		
+		Mockito.when(utils.getLong()).thenReturn(ORDER_ID, ITEM2_ID);
+		Mockito.when(utils.getInt()).thenReturn(QUANTITY2);
+		Mockito.when(utils.getString()).thenReturn("add");
+		Mockito.when(dao.readOrder(any(Long.class))).thenReturn(oldOrder);
+		Mockito.when(dao.update(any(Order.class))).thenReturn(updated);
+		
+		assertEquals(updated, controller.update());
+		
+		Mockito.verify(utils, Mockito.times(1)).getString();
+		Mockito.verify(utils, Mockito.times(2)).getLong();
+		Mockito.verify(utils, Mockito.times(1)).getInt();
+		Mockito.verify(dao, Mockito.times(1)).readOrder(ORDER_ID);
+		Mockito.verify(dao, Mockito.times(1)).update(updated);
+		
+	}
+	
+	@Test
+	public void testUpdateRemove() {
+		final Long ORDER_ID = 1l;
+		final Long CUSTOMER_ID = 1l;
+		final Long ITEM1_ID = 1l;
+		final Long ITEM2_ID = 2l;
+		final Integer QUANTITY1 = 1;
+		final Integer QUANTITY2 = 2;
+		
+		Item item1 = new Item(ITEM1_ID, QUANTITY1);
+		Item item2 = new Item(ITEM2_ID, QUANTITY2);
+		List<Item> oldItems = new ArrayList<>();
+		List<Item> newItems = new ArrayList<>();
+		oldItems.add(item1);
+		oldItems.add(item2);
+		newItems.add(item2);
+		final Order oldOrder = new Order(ORDER_ID, CUSTOMER_ID, oldItems);
+		final Order updated = new Order(ORDER_ID, CUSTOMER_ID, newItems);
+		
+		Mockito.when(utils.getLong()).thenReturn(ORDER_ID, ITEM1_ID);
+		Mockito.when(utils.getString()).thenReturn("remove");
+		Mockito.when(dao.readOrder(any(Long.class))).thenReturn(oldOrder);
+		Mockito.when(dao.update(any(Order.class))).thenReturn(updated);
+		
+		assertEquals(updated, controller.update());
+		
+		Mockito.verify(utils, Mockito.times(1)).getString();
+		Mockito.verify(utils, Mockito.times(2)).getLong();
+		Mockito.verify(dao, Mockito.times(1)).readOrder(ORDER_ID);
+		Mockito.verify(dao, Mockito.times(1)).update(updated);
+		
+	}
+	
+	@Test
+	public void testUpdateFail() {
+		final Long ORDER_ID = 99l;
+		
+		Mockito.when(utils.getLong()).thenReturn(ORDER_ID);
+		Mockito.when(dao.readOrder(any(Long.class))).thenReturn(null);
+		
+		assertEquals(null, controller.update());
+		
+		Mockito.verify(utils, Mockito.times(1)).getLong();
 	}
 	
 	@Test
@@ -115,6 +200,4 @@ public class OrderControllerTest {
 
 		Mockito.verify(dao, Mockito.times(1)).readAll();
 	}
-	
-
 }

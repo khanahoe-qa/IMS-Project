@@ -67,7 +67,7 @@ public class Item {
 	}
 	
 	public String toString() {
-		return "id:" + id + " item name:" + name + " in stock:" + stock;
+		return "id: " + id + ", item name: " + name + ", price: " + price + ", in stock: " + stock;
 	}
 	
 	@Override
