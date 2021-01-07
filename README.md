@@ -1,7 +1,7 @@
 Coverage: 34%
-# Project Title
+# IMS Project
 
-One Paragraph of project description goes here
+This application is an inventory management system. It can be used to create, read, update and delete customer, inventory item and order records in a persistent SQL database.
 
 ## Getting Started
 
@@ -9,7 +9,13 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+#### Java
+In order to run the included prebuilt application, a Java Virtual Machine is required. The Java development kit is required to build the application.
+
+#### MySQL server
+The application connects to a MySQL server. The fat jar is configured to connect to a server running on localhost. To run on another server, edit the DB_URL variable in 'src/main/java/com/qa/ims/utils/DBUtils.java'. The application automatically creates a database called "ims" on the server if one doesn't already exist.
+
+The MySQL server installer for Windows can be downloaded from [here](https://dev.mysql.com/downloads/installer/).
 
 ```
 Give examples
