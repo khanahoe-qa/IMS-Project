@@ -3,6 +3,8 @@
 package "com.qa.ims"{
 
 	IMS ..> Runner
+	Domain --> IMS
+	Action --> IMS
 
 	class Runner{
 		+main(args : String[]) : void
@@ -17,13 +19,28 @@ package "com.qa.ims"{
 		+doAction() : void
 	}
 
+	enum Domain{	
+	     	-description : String
+		+getDescription() : String
+		+getDomain(utils: Utils) : Domain
+		+printDomains() : void
+	}
+
+	enum Action{
+		-description : String
+		+getDescription(): String
+		+getAction(utils : Utils): Action
+		+printActions(): void
+	}
+
+
 	package com.qa.ims.controller{
 
 		CustomerController ..|> CrudController
 		ItemController ..|> CrudController
 		OrderController ..|> CrudController
 		CrudController --> IMS
-		Action --> IMS
+		OrderSelection --> OrderController
 
 		interface CrudController{
 			readAll() : List<T>
@@ -47,12 +64,11 @@ package "com.qa.ims"{
 			-utils : Utils
 		}
 
-		enum Action{
+		enum OrderSelection{
 			-description : String
-			+LOGGER : Logger
-			+getDescription(): String
-			+printActions(): void
-			+getAction(utils : Utils): Action
+			+getDescription() : String
+			+getSelection(utils : Utils) : void
+			+printSelection() : void
 		}
 	}
 
@@ -91,6 +107,7 @@ package "com.qa.ims"{
 			
 				+readLatest() : Order
 				+readOrder(id : Long) : Order
+				+getOrderCost(order : Order) : Float
 				-collapseOrders(orders : List<Order>) : List<Order>
 				-createOrderItem(order : Order) : void
 			}
@@ -101,7 +118,6 @@ package "com.qa.ims"{
 			Customer ..> CustomerDAO
 			Item ..> ItemDAO
 			Order ..> OrderDAO
-			Domain --> IMS
 		
 			class Customer{
 			
@@ -132,13 +148,6 @@ package "com.qa.ims"{
 				+toString() : String
 				+addItem(item : Item) : void
 				+equals(obj : Object) : Boolean
-			}
-
-			enum Domain{
-		
-				-description : String
-				+getDescription() : String
-				+getDomain(utils: Utils) : Domain
 			}
 		}
 	}
