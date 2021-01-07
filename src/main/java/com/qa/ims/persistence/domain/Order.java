@@ -49,15 +49,32 @@ public class Order {
 	// Returns a string containing names of items and the number of each ordered
 	@Override
 	public String toString() {
-		String orderDetails = "\nOrder id: " + order_id + ", customer id: " + customer_id;
+		String orderDetails = "\norder id: " + order_id + ", customer id: " + customer_id;
 		for(Item i: items) {
-			orderDetails += "\nItem ID: "+i.getId()+", quantity: "+i.getQuantity();
+			orderDetails += "\nitem ID: "+i.getId()+", quantity: "+i.getQuantity();
 		}
 		return orderDetails;
 	}
 	
 	public void addItem(Item item) {
 		items.add(item);
+	}
+	
+	// Searches for an item id in items and removes the last item with that id, then returns the list of items
+	public List<Item> removeItem(Long item_id){
+		int index = 0;
+		boolean found = false;
+		for(int i = 0; i < items.size(); ++i) {
+			
+			if(items.get(i).getId() == item_id) {
+				index = i;
+				found = true;
+			}
+		}
+		if(found) {
+			items.remove(index);
+		}
+		return items;
 	}
 	
 	@Override

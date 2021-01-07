@@ -161,9 +161,27 @@ public class OrderDAO implements Dao<Order>{
 		return new Order(order_id, customer_id, items);
 	}
 	
+	public float getOrderCost(Order order) {
+		float cost = 0f;
+		for(Item i: order.getItems()) {
+			Long item_id = i.getId();
+			try (Connection connection = DBUtils.getInstance().getConnection();
+					Statement statement = connection.createStatement();) {
+				ResultSet resultSet = statement.executeQuery("SELECT quantity, price FROM items i JOIN order_item oi "
+						+ "ON i.item_id=oi.item_id WHERE oi.item_id = " + item_id + ";");
+				resultSet.next();
+				cost += resultSet.getInt("quantity") * resultSet.getFloat("price");
+			} catch (Exception e) {
+				LOGGER.debug(e);
+				LOGGER.error(e.getMessage());
+				return 0;
+			}
+		}
+		return cost;
+	}
+	
 	// Iterate through the orders list and add items from orders with the same id
 	// to the first order with that id, then delete all other orders with that id
-
 	private List<Order> collapseOrders(List<Order> orders){
 		
 		List<Order> collapsedOrders = new ArrayList<>();
