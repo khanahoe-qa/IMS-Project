@@ -1,0 +1,184 @@
+@startuml
+
+package "com.qa.ims"{
+
+	IMS ..> Runner
+	Domain --> IMS
+	Action --> IMS
+
+	class Runner{
+		+main(args : String[]) : void
+	}
+
+	class IMS{
+		-customers : CustomerController
+		-items : ItemController
+		-orders : OrderController
+		-utils : Utils
+		+imsSystem() : void
+		+doAction() : void
+	}
+
+	enum Domain{	
+	     	-description : String
+		+getDescription() : String
+		+getDomain(utils: Utils) : Domain
+		+printDomains() : void
+	}
+
+	enum Action{
+		-description : String
+		+getDescription(): String
+		+getAction(utils : Utils): Action
+		+printActions(): void
+	}
+
+
+	package com.qa.ims.controller{
+
+		CustomerController ..|> CrudController
+		ItemController ..|> CrudController
+		OrderController ..|> CrudController
+		CrudController --> IMS
+		OrderSelection --> OrderController
+
+		interface CrudController{
+			readAll() : List<T>
+			create() : T
+			update() : T
+			delete() : Integer
+		}
+
+		class CustomerController{
+			-customerDAO : CustomerDAO
+			-utils : Utils
+		}
+
+		class ItemController{
+			-itemDAO : ItemDAO
+			-utils : Utils
+		}
+
+		class OrderController{
+			-orderDAO : OrderDAO
+			-utils : Utils
+		}
+
+		enum OrderSelection{
+			-description : String
+			+getDescription() : String
+			+getSelection(utils : Utils) : void
+			+printSelection() : void
+		}
+	}
+
+	package "com.qa.ims.persistence"{
+
+		package "com.qa.ims.persistence.dao"{
+
+			CustomerDAO ..|> DAO
+			ItemDAO ..|> DAO
+			OrderDAO ..|> DAO
+			DAO --> CustomerController
+			DAO --> ItemController
+			DAO --> OrderController
+
+			interface DAO{
+				readAll() : List<T>
+				create(t : T) : T
+				update(t : T) : T
+				delete(id : Long) : Integer
+				modelFromResultSet(resultSet : ResultSet) : T
+			}
+
+			class CustomerDAO{
+				
+				+readLatest() : Customer
+				+readCustomer(id : Long) : Customer
+			}
+
+			class ItemDAO{
+			
+				+readLatest() : Item
+				+readItem(id : Long) : Item
+			}
+
+			class OrderDAO{
+			
+				+readLatest() : Order
+				+readOrder(id : Long) : Order
+				+getOrderCost(order : Order) : Float
+				-collapseOrders(orders : List<Order>) : List<Order>
+				-createOrderItem(order : Order) : void
+			}
+		}
+	
+		package com.qa.persistence.domain{
+			
+			Customer ..> CustomerDAO
+			Item ..> ItemDAO
+			Order ..> OrderDAO
+		
+			class Customer{
+			
+				-id : Long
+				-firstName : String
+				-surname : String
+				+toString() : String
+				+equals(obj : Object) : Boolean
+			}
+
+			class Item{
+			
+				-id : Long
+				-name : String
+				-stock : Integer
+				-price : Float
+				-quantity : Integer
+				+toString() : String
+				+equals(obj : Object) : Boolean
+			}
+
+			class Order{
+			
+				-order_id : Long
+				-customer_id : Long
+				-items : List<Item>
+				-quantity : Integer
+				+toString() : String
+				+addItem(item : Item) : void
+				+equals(obj : Object) : Boolean
+			}
+		}
+	}
+
+	package "com.qa.ims.utils"{
+
+		Utils --> IMS
+		DBUtils --> DAO
+	
+		class DBUtils{
+
+			-DB_USER : String
+			-DB_PASS : String
+			-DB_URL : String
+			-instance : DBUtils
+			+init() : Integer
+			+executeSQLFile(file : String) : Integer
+			+getConnection() : Connection
+			+connect(username : String, password : String) : DBUtils
+			+getInstance() : DBUtils
+		}
+
+		class Utils{
+
+			-scanner : Scanner
+			+getLong() : Long
+			+getInt() : Integer
+			+getString() : String
+			+getDouble() : Double
+			+getFloat() : Float
+		}
+	}
+}
+@enduml
