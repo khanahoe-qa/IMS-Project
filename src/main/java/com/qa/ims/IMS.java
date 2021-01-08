@@ -67,7 +67,7 @@ public class IMS {
 					active = this.customers;
 					break;
 				case ITEM:
-					active = null;
+					active = this.items;
 					break;
 				case ORDER:
 					active = this.orders;
