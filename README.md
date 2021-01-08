@@ -60,6 +60,10 @@ To use this application on a live system you will probably want to specify the s
 
 We use [SemVer](http://semver.org/) for versioning.
 
+## Jira board
+
+[Link to Jira board](https://kieran20novsoftware2.atlassian.net/jira/software/projects/IMS/boards/4).
+
 ## Authors
 
 * **Chris Perrins** - *Initial work* - [christophperrins](https://github.com/christophperrins)
