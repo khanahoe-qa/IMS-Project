@@ -1,4 +1,3 @@
-Coverage: 34%
 # IMS Project
 
 This application is an inventory management system. It can be used to create, read, update and delete customer, inventory item and order records in a persistent SQL database.
@@ -10,7 +9,7 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites
 
 #### Java
-[Java Development Kit (JDK)](https://www.oracle.com/java/technologies/javase-downloads.html) is required to build the application.
+[Java Development Kit (JDK)](https://www.oracle.com/java/technologies/javase-downloads.html) version 14 is required to build the application.
 
 #### MySQL server
 The application connects to a MySQL server. The fat jar is configured to connect to a server running on localhost. The application automatically creates a database called "ims" on the server if one doesn't already exist.
